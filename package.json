@@ -1,0 +1,42 @@
+{
+  "name": "angularjs-cli",
+  "version": "1.0.0",
+  "description": "AngularJS CLI to create ES2015/TS driven projects and manage components",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "bin": {
+    "ngjs": "./src/main.js"
+  },
+  "scripts": {
+    "build": "mkdirp dist && browserify --transform babelify src/main.js -o dist/angularjs-cli.bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scipper/angularjs-cli.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "cli"
+  ],
+  "author": "Steffen Kowalski <scipper@myscipper.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scipper/angularjs-cli/issues"
+  },
+  "homepage": "https://github.com/scipper/angularjs-cli#readme",
+  "dependencies": {
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "mkdirp": "^0.5.1"
+  }
+}
