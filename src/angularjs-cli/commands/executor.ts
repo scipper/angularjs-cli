@@ -32,6 +32,10 @@ export abstract class Executor {
     this.command = command;
     this.config = config;
     this.options = options;
+
+    if(this.options['verbose']) {
+      Logger.verbose = true;
+    }
   }
 
   /**

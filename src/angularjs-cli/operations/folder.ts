@@ -20,22 +20,29 @@ export class Folder {
     this.config = config;
   }
 
-  /**
-   *
-   */
-  generateCompleteFolderStructure(): void {
+    /**
+     *
+     * @param {boolean} createNewProject
+     */
+  generateCompleteFolderStructure(createNewProject: boolean = true): void {
     Logger.log(`\n\x1b[36mGenerating folder structure... \x1b[0m`);
-    this.generateSrcFolder();
+    this.generateSrcFolder(createNewProject);
   }
 
-  /**
-   *
-   */
-  generateSrcFolder(): void {
-    let appFolder = path.join(process.cwd(), this.config.sourceFolder, this.config.appName);
-    let scssFolder = path.join(process.cwd(), this.config.sourceFolder, 'assets', 'scss');
-    let imagesFolder = path.join(process.cwd(), this.config.sourceFolder, 'assets', 'images');
-    let testFolder = path.join(process.cwd(), 'test', this.config.appName);
+    /**
+     *
+     * @param {boolean} createNewProject
+     */
+  generateSrcFolder(createNewProject: boolean): void {
+    let srcFolder = process.cwd();
+    if(!createNewProject) {
+      srcFolder = path.join(process.cwd(), this.config.appName);
+    }
+
+    let appFolder = path.join(srcFolder, this.config.sourceFolder, 'app');
+    let scssFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'scss');
+    let imagesFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'images');
+    let testFolder = path.join(srcFolder, 'test', this.config.appName);
     mkdirp(appFolder, (error) => {
       this.errorCallback(appFolder, error);
     });
