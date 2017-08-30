@@ -10,7 +10,7 @@
     "ngjs": "./bin/ngjs.js"
   },
   "scripts": {
-    "build": "mkdirp bin && browserify --node --plugin=tsify -x lodash -x fs -x complete -x path -x prompt-sync src/main.ts --plugin [minifyify --no-map] > bin/ngjs.js",
+    "build": "mkdirp bin && echo #!/usr/bin/env node > bin/ngjs.js && browserify --node --plugin=tsify -x lodash -x fs -x complete -x path -x prompt-sync src/main.ts --plugin [minifyify --no-map] >> bin/ngjs.js",
     "start": "mkdirp dist && watchify --debug --node --plugin=tsify -x lodash -x fs -x complete -x path -x prompt-sync src/main.ts -o dist/angularjs-cli.bundle.js -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
