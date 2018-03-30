@@ -3,9 +3,9 @@ import {Command} from "./command";
 import {GenerateCommand} from "./generate-command/generate-command";
 import {InitCommand} from "./init-command/init-command";
 
-let newCommand = new NewCommand();
-let generateCommand = new GenerateCommand();
-let initCommand = new InitCommand();
+const newCommand = new NewCommand();
+const generateCommand = new GenerateCommand();
+const initCommand = new InitCommand();
 
 /**
  *

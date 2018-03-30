@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import {Config} from "../config";
@@ -20,29 +19,29 @@ export class Folder {
     this.config = config;
   }
 
-    /**
-     *
-     * @param {boolean} createNewProject
-     */
+  /**
+   *
+   * @param {boolean} createNewProject
+   */
   generateCompleteFolderStructure(createNewProject: boolean = true): void {
     Logger.log(`\n\x1b[36mGenerating folder structure... \x1b[0m`);
     this.generateSrcFolder(createNewProject);
   }
 
-    /**
-     *
-     * @param {boolean} createNewProject
-     */
+  /**
+   *
+   * @param {boolean} createNewProject
+   */
   generateSrcFolder(createNewProject: boolean): void {
     let srcFolder = process.cwd();
     if(!createNewProject) {
       srcFolder = path.join(process.cwd(), this.config.appName);
     }
 
-    let appFolder = path.join(srcFolder, this.config.sourceFolder, 'app');
-    let scssFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'scss');
-    let imagesFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'images');
-    let testFolder = path.join(srcFolder, 'test', this.config.appName);
+    const appFolder = path.join(srcFolder, this.config.sourceFolder, 'app');
+    const scssFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'scss');
+    const imagesFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'images');
+    const testFolder = path.join(srcFolder, 'test', this.config.appName);
     mkdirp(appFolder, (error) => {
       this.errorCallback(appFolder, error);
     });

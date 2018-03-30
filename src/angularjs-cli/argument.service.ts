@@ -8,12 +8,12 @@ export class ArgumentService {
 
   /**
    *
-   * @param {Array<string>} cliArguments
+   * @param {string[]} cliArguments
    * @returns {{}}
    */
-  public static parseOptions(cliArguments: Array<string>): { [key: string]: Option } {
-    let realArguments: Array<string> = cliArguments.splice(2);
-    let options: { [key: string]: Option } = {};
+  public static parseOptions(cliArguments: string[]): { [key: string]: Option } {
+    const realArguments: string[] = cliArguments.splice(2);
+    const options: { [key: string]: Option } = {};
 
     _.forEach(realArguments, (argument: string) => {
       if(AvailableOptions.hasOwnProperty(argument)) {
@@ -26,11 +26,11 @@ export class ArgumentService {
 
   /**
    *
-   * @param {Array<string>} cliArguments
+   * @param {string[]} cliArguments
    * @returns {Array<Command>}
    */
-  public static parseCommand(cliArguments: Array<string>): Command {
-    let realArguments: Array<string> = cliArguments.splice(2);
+  public static parseCommand(cliArguments: string[]): Command {
+    const realArguments: string[] = cliArguments.splice(2);
     let command: Command = null as any;
 
     if(realArguments.length === 0) {

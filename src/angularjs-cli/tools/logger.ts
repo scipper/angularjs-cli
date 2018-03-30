@@ -9,7 +9,7 @@ export class Logger {
    *
    * @param message
    */
-  static print(...message: Array<any>): void {
+  static print(...message: any[]): void {
     console.log.apply(console, message);
   }
 
@@ -17,7 +17,7 @@ export class Logger {
    *
    * @param message
    */
-  static log(...message: Array<any>): void {
+  static log(...message: any[]): void {
     if(!Logger.verbose) {
       return;
     }

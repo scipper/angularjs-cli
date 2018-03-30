@@ -35,7 +35,7 @@ export class NewCommandExecutor extends Executor {
 
     Logger.print(`\x1b[36mCreating new ${AngularjsCli.NAME} project in '${path.join(process.cwd(), this.command.getArgument())}\x1b[0m'`);
 
-    let prompt = new Prompt();
+    const prompt = new Prompt();
     prompt.newProject(true);
   }
 

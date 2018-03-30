@@ -48,7 +48,7 @@ export abstract class Executor {
    * @returns {boolean}
    */
   isConfigValid(): boolean {
-    let isValid = this.command.needsConfig() && this.config !== null;
+    const isValid = this.command.needsConfig() && this.config !== null;
     if(isValid) {
       return true;
     }
@@ -65,7 +65,7 @@ export abstract class Executor {
    * @returns {boolean}
    */
   isArgumentValid(): boolean {
-    let isValid = this.command.getAvailableArguments().indexOf(this.command.getArgument()) !== -1 ||
+    const isValid = this.command.getAvailableArguments().indexOf(this.command.getArgument()) !== -1 ||
       this.command.getAvailableArguments().length === 0;
 
     if(isValid) {
@@ -78,6 +78,6 @@ export abstract class Executor {
     });
 
     return false;
-  };
+  }
 
 }

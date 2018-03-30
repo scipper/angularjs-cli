@@ -29,7 +29,7 @@ export class InitCommandExecutor extends Executor {
 
     Logger.log(`\x1b[36mInitialising project... \x1b[0m`);
 
-    let prompt = new Prompt();
+    const prompt = new Prompt();
     prompt.newProject(false);
   }
 

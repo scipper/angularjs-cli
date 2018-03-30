@@ -12,48 +12,19 @@ import {Logger} from "./tools/logger";
 
 export class AngularjsCli {
 
-  /**
-   *
-   * @type {string}
-   */
   static VERSION = '1.0.0';
-
-  /**
-   *
-   * @type {string}
-   */
   static NAME = 'AngularJS CLI';
-
-  /**
-   * @type {Config}
-   */
   protected config: Config;
-
-  /**
-   * @type {Array}
-   */
-  protected cliArguments: Array<string>;
-
-  /**
-   * @type {{}}
-   */
+  protected cliArguments: string[];
   protected options: { [key: string]: Option };
-
-  /**
-   * @type {Command}
-   */
   protected command: Command;
-
-  /**
-   * @type {boolean}
-   */
   protected allowExecution: boolean;
 
   /**
    *
    * @param {Array<string>} cliArguments
    */
-  constructor(cliArguments: Array<string>) {
+  constructor(cliArguments: string[]) {
     this.allowExecution = false;
     this.config = null as any;
 
@@ -80,7 +51,7 @@ export class AngularjsCli {
    *
    * @returns {Command}
    */
-  getCommand(): Command{
+  getCommand(): Command {
     return this.command;
   }
 
@@ -88,7 +59,7 @@ export class AngularjsCli {
    *
    */
   readConfig() {
-    try{
+    try {
       this.config = require(process.cwd() + '/ngjs.json');
     } catch(e) {
 
@@ -99,7 +70,7 @@ export class AngularjsCli {
    *
    */
   prepare() {
-    let commandValidResult = this.isCommandValid();
+    const commandValidResult = this.isCommandValid();
 
     if(commandValidResult === ErrorCodes.COMMAND_MISSING_COMMAND) {
       Logger.print(`\x1b[31mMissing command\x1b[0m. Available commands are:`);
@@ -134,22 +105,21 @@ export class AngularjsCli {
       return;
     }
 
+    let executor;
+
     switch(this.command.getName()) {
-      case "init": {
-        let executor = new InitCommandExecutor(this.command, this.config, this.options);
-
+      case "init":
+        executor = new InitCommandExecutor(this.command, this.config, this.options);
         executor.execute();
-      } break;
-      case "new": {
-        let executor = new NewCommandExecutor(this.command, this.config, this.options);
-
+        break;
+      case "new":
+        executor = new NewCommandExecutor(this.command, this.config, this.options);
         executor.execute();
-      } break;
-      case "generate": {
-        let executor = new GenerateCommandExecutor(this.command, this.config, this.options);
-
+        break;
+      case "generate":
+        executor = new GenerateCommandExecutor(this.command, this.config, this.options);
         executor.execute();
-      } break;
+        break;
     }
   }
 
@@ -170,7 +140,7 @@ export class AngularjsCli {
       return ErrorCodes.COMMAND_MISSING_ARGUMENT;
     }
 
-    let optionKeys = Object.keys(this.options);
+    const optionKeys = Object.keys(this.options);
     if(optionKeys.length > 0) {
       let invalidOptions = false;
       _.forEach(this.options, (option) => {

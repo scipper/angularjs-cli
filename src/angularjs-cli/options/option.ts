@@ -21,14 +21,14 @@ export abstract class Option {
   protected argumentNeeded: boolean;
 
   /**
-   * @type {Array<string>}
+   * @type {string[]}
    */
-  protected availableArguments: Array<string>;
+  protected availableArguments: string[];
 
   /**
    *
    */
-  constructor() {
+  protected constructor() {
     this.shortName = '';
     this.longName = '';
     this.argument = '';
@@ -62,9 +62,9 @@ export abstract class Option {
 
   /**
    *
-   * @returns {Array<string>}
+   * @returns {string[]}
    */
-  getAvailableArguments(): Array<string> {
+  getAvailableArguments(): string[] {
     return this.availableArguments;
   }
 

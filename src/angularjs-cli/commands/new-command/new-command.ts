@@ -12,7 +12,7 @@ export class NewCommand extends Command {
     this.name = 'new';
     this.argumentNeeded = true;
 
-    let versionOption = new VersionOption();
+    const versionOption = new VersionOption();
 
     this.availableOptions = {
       [versionOption.getLongName()]: versionOption

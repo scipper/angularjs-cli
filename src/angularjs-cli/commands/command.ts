@@ -23,9 +23,9 @@ export abstract class Command {
   protected argument: string;
 
   /**
-   * @type {Array<string>}
+   * @type {string[]}
    */
-  protected availableArguments: Array<string>;
+  protected availableArguments: string[];
 
   /**
    * @type {{}}
@@ -86,9 +86,9 @@ export abstract class Command {
 
   /**
    *
-   * @returns {Array<string>}
+   * @returns {string[]}
    */
-  getAvailableArguments(): Array<string> {
+  getAvailableArguments(): string[] {
     return this.availableArguments;
   }
 
