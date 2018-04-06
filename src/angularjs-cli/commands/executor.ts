@@ -7,28 +7,17 @@ import {Option} from "../options/option";
 
 export abstract class Executor {
 
-  /**
-   * @type {Command}
-   */
   protected command: Command;
-
-  /**
-   * @type {Config}
-   */
-  protected config: Config;
-
-  /**
-   * @type {{}}
-   */
+  protected config?: Config;
   protected options: { [key: string]: Option };
 
   /**
    *
    * @param {Command} command
-   * @param {Config} config
    * @param {{}} options
+   * @param {Config} config
    */
-  constructor(command: Command, config: Config, options: { [key: string]: Option }) {
+  protected constructor(command: Command, options: { [key: string]: Option }, config?: Config) {
     this.command = command;
     this.config = config;
     this.options = options;
@@ -48,7 +37,7 @@ export abstract class Executor {
    * @returns {boolean}
    */
   isConfigValid(): boolean {
-    const isValid = this.command.needsConfig() && this.config !== null;
+    const isValid = this.command.needsConfig() && this.config;
     if(isValid) {
       return true;
     }

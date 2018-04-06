@@ -35,7 +35,7 @@ export abstract class Command {
   /**
    *
    */
-  constructor() {
+  protected constructor() {
     this.name = '';
     this.argument = '';
     this.configNeeded = false;

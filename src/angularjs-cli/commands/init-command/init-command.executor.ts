@@ -10,18 +10,18 @@ export class InitCommandExecutor extends Executor {
   /**
    *
    * @param {Command} command
-   * @param {Config} config
    * @param {{}} options
+   * @param {Config} config
    */
-  constructor(command: Command, config: Config, options: { [key: string]: Option }) {
-    super(command, config, options);
+  constructor(command: Command, options: { [key: string]: Option }, config?: Config) {
+    super(command, options, config);
   }
 
   /**
    *
    */
   execute() {
-    if(this.config !== null) {
+    if(this.config) {
       Logger.print(`\x1b[36mProject already initialised\x1b[0m`);
 
       return true;
