@@ -1,43 +1,21 @@
+import {OptionsType} from "../options/options.type";
 import {Option} from "../options/option";
 
 export abstract class Command {
 
-  /**
-   * @type {string}
-   */
   protected name: string;
-
-  /**
-   * @type {string}
-   */
   protected configNeeded: boolean;
-
-  /**
-   * @type {boolean}
-   */
   protected argumentNeeded: boolean;
-
-  /**
-   * @type {string}
-   */
   protected argument: string;
-
-  /**
-   * @type {string[]}
-   */
   protected availableArguments: string[];
-
-  /**
-   * @type {{}}
-   */
-  protected availableOptions: { [key: string]: Option };
+  protected availableOptions: OptionsType;
 
   /**
    *
    */
   protected constructor() {
-    this.name = '';
-    this.argument = '';
+    this.name = "";
+    this.argument = "";
     this.configNeeded = false;
     this.argumentNeeded = false;
     this.availableArguments = [];
@@ -96,7 +74,7 @@ export abstract class Command {
    *
    * @returns {{}}
    */
-  getAvailableOptions(): { [key: string]: Option } {
+  getAvailableOptions(): OptionsType {
     return this.availableOptions;
   }
 

@@ -3,7 +3,6 @@ import {Command} from "./commands/command";
 import {HelpCommandExecutor} from "./commands/help-command/help-command.executor";
 import {Option} from "./options/option";
 import {ErrorCodes} from "./errors/error-codes";
-import {NewCommandExecutor} from "./commands/new-command/new-command.executor";
 import {AvailableCommands} from "./commands/available-commands";
 import * as _ from "lodash";
 import {GenerateCommandExecutor} from "./commands/generate-command/generate-command.executor";
@@ -21,14 +20,16 @@ export class AngularjsCli {
   protected cliArguments: string[];
   protected options: { [key: string]: Option };
   protected command: Command;
-  protected allowExecution: boolean;
+  protected executionCode: number;
+  protected showVersion: boolean;
 
   /**
    *
    * @param {Array<string>} cliArguments
    */
   constructor(cliArguments: string[]) {
-    this.allowExecution = false;
+    this.executionCode = ErrorCodes.NOT_INITIALISED;
+    this.showVersion = false;
 
     this.cliArguments = cliArguments;
 
@@ -43,7 +44,7 @@ export class AngularjsCli {
     try {
       this.config = require(process.cwd() + "/ngjs.json");
     } catch(e) {
-
+      Logger.print(Color.blue("INFO: No ngjs.json found"));
     }
   }
 
@@ -51,39 +52,8 @@ export class AngularjsCli {
    *
    */
   prepare() {
-    const commandValidResult = this.isCommandValid();
-
-    if(this.options["version"]) {
-      let welcomeMessage = Color.cyan("\n-----------------------\n");
-      welcomeMessage += Color.cyan(` ${AngularjsCli.NAME} - ${AngularjsCli.VERSION} \n`);
-      welcomeMessage += Color.cyan("-----------------------");
-      Logger.print(welcomeMessage);
-
-      return;
-    }
-
-    if(commandValidResult === ErrorCodes.COMMAND_MISSING_COMMAND) {
-      Logger.print(`${Color.yellow("Missing command")}. Available commands are:`);
-
-      _.forEach(AvailableCommands, (command: Command) => {
-        Logger.print(` ${command.getName()}`);
-      });
-    }
-
-    if(commandValidResult === ErrorCodes.COMMAND_MISSING_ARGUMENT) {
-      Logger.print(`\x1b[31mMissing argument on command ${this.getCommandName()} \x1b[0m`);
-    }
-
-    if(commandValidResult === ErrorCodes.COMMAND_INVALID_OPTIONS) {
-      Logger.print(`\x1b[31mInvalid options on command ${this.getCommandName()}\x1b[0m. Valid options are:`);
-      _.forEach(this.getCommand().getAvailableOptions(), (option: Option) => {
-        Logger.print(` ${option.getShortName() ? "-" + option.getShortName() : ""}    --${option.getLongName()}`);
-      });
-    }
-
-    if(commandValidResult === ErrorCodes.OK) {
-      this.allowExecution = true;
-    }
+    this.executionCode = this.isCommandValid();
+    this.showVersion = this.options.hasOwnProperty("version");
   }
 
   /**
@@ -91,7 +61,16 @@ export class AngularjsCli {
    * @returns {void}
    */
   process(): void {
-    if(!this.allowExecution) {
+    if(this.showVersion) {
+      let welcomeMessage = Color.cyan("-----------------------\n");
+      welcomeMessage += Color.cyan(` ${AngularjsCli.NAME} - ${AngularjsCli.VERSION} \n`);
+      welcomeMessage += Color.cyan("-----------------------\n");
+      Logger.print(welcomeMessage);
+    }
+
+    if(this.executionCode !== ErrorCodes.OK) {
+      this.handleErrors();
+
       return;
     }
 
@@ -106,10 +85,6 @@ export class AngularjsCli {
         executor = new InitCommandExecutor(this.command, this.options, this.config);
         executor.execute();
         break;
-      case "new":
-        executor = new NewCommandExecutor(this.command, this.options, this.config);
-        executor.execute();
-        break;
       case "generate":
         executor = new GenerateCommandExecutor(this.command, this.options, this.config);
         executor.execute();
@@ -119,6 +94,30 @@ export class AngularjsCli {
 
   finish() {
 
+  }
+
+  /**
+   *
+   */
+  protected handleErrors() {
+    if(this.executionCode === ErrorCodes.COMMAND_MISSING_COMMAND) {
+      Logger.print(`${Color.yellow("Missing command")}. Available commands are:`);
+
+      _.forEach(AvailableCommands, (command: Command) => {
+        Logger.print(` ${command.getName()}`);
+      });
+    }
+
+    if(this.executionCode === ErrorCodes.COMMAND_MISSING_ARGUMENT) {
+      Logger.print(Color.yellow(`Missing argument on command ${this.getCommandName()}`));
+    }
+
+    if(this.executionCode === ErrorCodes.COMMAND_INVALID_OPTIONS) {
+      Logger.print(`${Color.yellow(`Invalid options on command ${this.getCommandName()}`)}. Valid options are:`);
+      _.forEach(this.getCommand().getAvailableOptions(), (option: Option) => {
+        Logger.print(` ${option.getShortName() ? "-" + option.getShortName() : ""} --${option.getLongName()}`);
+      });
+    }
   }
 
   /**
@@ -146,22 +145,28 @@ export class AngularjsCli {
       return ErrorCodes.COMMAND_MISSING_COMMAND;
     }
 
-    if(this.command.needsArgument() && this.command.getArgument() === "") {
-      return ErrorCodes.COMMAND_MISSING_ARGUMENT;
-    }
-
     const optionKeys = Object.keys(this.options);
     if(optionKeys.length > 0) {
-      let invalidOptions = false;
+      let invalidOptions = true;
       _.forEach(this.options, (option) => {
-        if(!this.command.getAvailableOptions()[option.getLongName()]) {
-          invalidOptions = true;
+        if(this.command.getAvailableOptions()[option.getLongName()]) {
+          invalidOptions = false;
+        }
+
+        if(!invalidOptions) {
+          return false;
         }
       });
 
       if(invalidOptions) {
         return ErrorCodes.COMMAND_INVALID_OPTIONS;
       }
+    }
+
+    if(this.command.needsArgument() &&
+      this.command.getArgument() === "" &&
+      !this.options.hasOwnProperty("help")) {
+      return ErrorCodes.COMMAND_MISSING_ARGUMENT;
     }
 
     return ErrorCodes.OK;

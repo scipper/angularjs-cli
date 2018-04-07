@@ -1,6 +1,7 @@
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import {Config} from "../config";
+import {Color} from "../tools/color";
 import ErrnoException = NodeJS.ErrnoException;
 import {Logger} from "../tools/logger";
 
@@ -24,7 +25,7 @@ export class Folder {
    * @param {boolean} createNewProject
    */
   generateCompleteFolderStructure(createNewProject: boolean = true): void {
-    Logger.log(`\n\x1b[36mGenerating folder structure... \x1b[0m`);
+    Logger.log(Color.cyan(`Generating folder structure...`));
     this.generateSrcFolder(createNewProject);
   }
 
@@ -63,8 +64,8 @@ export class Folder {
    */
   private errorCallback(folderName: string, error: ErrnoException): void {
     if(error) {
-      Logger.print(`\x1b[31mFailed to create directory ${folderName}\x1b[0m`);
-      Logger.log(`\n\x1b[31m${error}\x1b[0m `);
+      Logger.print(Color.red(`Failed to create directory ${folderName}`));
+      Logger.log(Color.red(`\n${error}`));
 
       return;
     }

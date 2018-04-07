@@ -20,6 +20,12 @@ export class GenerateCommandExecutor extends Executor {
    *
    */
   execute() {
+    if(this.options["help"]) {
+      Logger.print(`Generate new component or module`);
+
+      return true;
+    }
+
     if(!this.isConfigValid()) {
       return;
     }

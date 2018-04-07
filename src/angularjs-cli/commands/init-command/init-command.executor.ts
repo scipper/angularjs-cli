@@ -1,3 +1,4 @@
+import {Color} from "../../tools/color";
 import {Executor} from "../executor";
 import {Command} from "../command";
 import {Config} from "../../config";
@@ -22,12 +23,18 @@ export class InitCommandExecutor extends Executor {
    */
   execute() {
     if(this.config) {
-      Logger.print(`\x1b[36mProject already initialised\x1b[0m`);
+      Logger.print(Color.yellow(`Project already initialised`));
 
       return true;
     }
 
-    Logger.log(`\x1b[36mInitialising project... \x1b[0m`);
+    if(this.options["help"]) {
+      Logger.print(`Initialise a new AngularJS project`);
+
+      return true;
+    }
+
+    Logger.log(Color.cyan(`Initialising project... `));
 
     const prompt = new Prompt();
     prompt.newProject(false);
