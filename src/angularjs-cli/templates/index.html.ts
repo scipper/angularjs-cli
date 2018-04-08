@@ -1,9 +1,9 @@
 /**
  *
- * @param {string} appName
+ * @param {string} rootModuleName
  * @returns {string}
  */
-export const IndexHtml = (appName: string) => {
+export const IndexHtml = (rootModuleName: string) => {
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -12,7 +12,7 @@ export const IndexHtml = (appName: string) => {
   <title>ngGame</title>
   <link rel="shortcut icon" href="assets/images/favicon.ico">
 </head>
-<body ng-app="${appName}">
+<body ng-app="${rootModuleName}">
 
 <ui-view name="mainView"></ui-view>
 

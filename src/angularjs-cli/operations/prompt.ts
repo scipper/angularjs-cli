@@ -2,6 +2,7 @@ import {Color} from "../tools/color";
 import {Logger} from "../tools/logger";
 import * as fs from "fs";
 import * as path from "path";
+import {StringParser} from "../tools/string-parser";
 import {File} from "./file";
 import {Folder} from "./folder";
 
@@ -18,16 +19,21 @@ export class Prompt {
     const complete = require("complete");
 
     const appName = prompt("What is the name of your app? (default: app): ", "app");
+    const description = prompt("Do you want to describe your project?: ");
     const targetDialect = prompt("In which dialect should the project be created? [es2015/ts] (default: es2015): ", {
       autocomplete: complete(["es2015","ts"]),
       value: "es2015"
     });
     const sourceFolder = prompt("What is your source folder? (default: src): ", "src");
+    const author = prompt("What is the authors name?: ");
 
     Logger.log(Color.green(`Done`));
 
     const config = {
       appName,
+      description,
+      author,
+      rootModuleName: StringParser.toCamelCase(appName),
       targetDialect,
       sourceFolder
     };
