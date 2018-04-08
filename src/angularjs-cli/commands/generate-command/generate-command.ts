@@ -1,5 +1,6 @@
 import {HelpOption} from "../../options/help.option";
 import {Command} from "../command";
+import {ComponentArgument} from "./component.argument";
 
 export class GenerateCommand extends Command {
 
@@ -10,6 +11,7 @@ export class GenerateCommand extends Command {
     super();
 
     const helpOption = new HelpOption();
+    const componentArgument = new ComponentArgument();
 
     this.name = 'generate';
     this.configNeeded = true;
@@ -17,10 +19,9 @@ export class GenerateCommand extends Command {
     this.availableOptions = {
       [helpOption.getLongName()]: helpOption
     };
-    this.availableArguments = [
-      "component",
-      "module"
-    ];
+    this.availableArguments = {
+      [componentArgument.getName()]: componentArgument
+    };
   }
 
 }

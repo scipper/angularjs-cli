@@ -1,4 +1,5 @@
 import {ArgumentService} from "./argument.service";
+import {Argument} from "./commands/argument";
 import {Command} from "./commands/command";
 import {HelpCommandExecutor} from "./commands/help-command/help-command.executor";
 import {Option} from "./options/option";
@@ -10,6 +11,7 @@ import {InitCommandExecutor} from "./commands/init-command/init-command.executor
 import {Config} from "./config";
 import {Color} from "./tools/color";
 import {Logger} from "./tools/logger";
+import * as fs from "fs";
 
 export class AngularjsCli {
 
@@ -42,8 +44,8 @@ export class AngularjsCli {
    */
   readConfig() {
     try {
-      this.config = require(process.cwd() + "/ngjs.json");
-    } catch(e) {
+      this.config = JSON.parse(fs.readFileSync(process.cwd() + "/ngjs.json").toString());
+    } catch(error) {
       Logger.print(Color.blue("INFO: No ngjs.json found"));
     }
   }
@@ -109,7 +111,10 @@ export class AngularjsCli {
     }
 
     if(this.executionCode === ErrorCodes.COMMAND_MISSING_ARGUMENT) {
-      Logger.print(Color.yellow(`Missing argument on command ${this.getCommandName()}`));
+      Logger.print(`${Color.yellow(`Missing argument on command ${this.getCommandName()}`)}. Valid arguments are:`);
+      _.forEach(this.getCommand().getAvailableArguments(), (argument: Argument) => {
+        Logger.print(` ${argument.getName()}`);
+      })
     }
 
     if(this.executionCode === ErrorCodes.COMMAND_INVALID_OPTIONS) {
@@ -143,24 +148,6 @@ export class AngularjsCli {
   protected isCommandValid(): number {
     if(this.command === null) {
       return ErrorCodes.COMMAND_MISSING_COMMAND;
-    }
-
-    const optionKeys = Object.keys(this.options);
-    if(optionKeys.length > 0) {
-      let invalidOptions = true;
-      _.forEach(this.options, (option) => {
-        if(this.command.getAvailableOptions()[option.getLongName()]) {
-          invalidOptions = false;
-        }
-
-        if(!invalidOptions) {
-          return false;
-        }
-      });
-
-      if(invalidOptions) {
-        return ErrorCodes.COMMAND_INVALID_OPTIONS;
-      }
     }
 
     if(this.command.needsArgument() &&

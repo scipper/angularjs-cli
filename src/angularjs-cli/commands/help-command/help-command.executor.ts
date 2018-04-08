@@ -1,7 +1,4 @@
-import * as path from "path";
-import {AngularjsCli} from "../../angularjs-cli";
 import {Config} from "../../config";
-import {Prompt} from "../../operations/prompt";
 import {Option} from "../../options/option";
 import {Color} from "../../tools/color";
 import {Logger} from "../../tools/logger";

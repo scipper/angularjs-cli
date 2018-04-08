@@ -2,6 +2,7 @@ import {Color} from "../tools/color";
 import {Logger} from "../tools/logger";
 import * as fs from "fs";
 import * as path from "path";
+import {File} from "./file";
 import {Folder} from "./folder";
 
 export class Prompt {
@@ -31,20 +32,21 @@ export class Prompt {
       sourceFolder
     };
 
-    fs.writeFile(path.join(process.cwd(), "ngjs.json"), JSON.stringify(config, null, 2), (error) => {
-      if(error) {
-        Logger.print(Color.red(`An error occured while creating ngjs.json`));
-        Logger.log(Color.red(`\n${error}`));
-
-        return;
-      }
+    try {
+      fs.writeFileSync(path.join(process.cwd(), "ngjs.json"), JSON.stringify(config, null, 2));
 
       Logger.log(Color.cyan(`ngjs.json with the following content was created in ${process.cwd()}:`));
       Logger.log(JSON.stringify(config, null, 2));
 
       const folder = new Folder(config);
       folder.generateCompleteFolderStructure(createNewProject);
-    });
+
+      const file = new File(config);
+      file.generateDefaults();
+    } catch(error) {
+      Logger.print(Color.red(`An error occured while creating ngjs.json`));
+      Logger.log(Color.red(`\n${error}`));
+    }
   }
 
 }

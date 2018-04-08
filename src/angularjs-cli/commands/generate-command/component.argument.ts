@@ -1,7 +1,7 @@
 import {HelpOption} from "../../options/help.option";
-import {Command} from "../command";
+import {Argument} from "../argument";
 
-export class InitCommand extends Command {
+export class ComponentArgument extends Argument {
 
   /**
    *
@@ -9,10 +9,10 @@ export class InitCommand extends Command {
   constructor() {
     super();
 
-    this.name = 'init';
-
     const helpOption = new HelpOption();
 
+    this.name = "component";
+    this.needsValue = true;
     this.availableOptions = {
       [helpOption.getLongName()]: helpOption
     };

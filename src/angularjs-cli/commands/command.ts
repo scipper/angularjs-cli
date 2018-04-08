@@ -1,5 +1,6 @@
 import {OptionsType} from "../options/options.type";
-import {Option} from "../options/option";
+import {Argument} from "./argument";
+import {ArgumentsType} from "./arguments.type";
 
 export abstract class Command {
 
@@ -7,7 +8,7 @@ export abstract class Command {
   protected configNeeded: boolean;
   protected argumentNeeded: boolean;
   protected argument: string;
-  protected availableArguments: string[];
+  protected availableArguments: ArgumentsType;
   protected availableOptions: OptionsType;
 
   /**
@@ -18,7 +19,7 @@ export abstract class Command {
     this.argument = "";
     this.configNeeded = false;
     this.argumentNeeded = false;
-    this.availableArguments = [];
+    this.availableArguments = {};
     this.availableOptions = {};
   }
 
@@ -26,7 +27,7 @@ export abstract class Command {
    *
    * @returns {string}
    */
-  getName(): string {
+  getName() {
     return this.name;
   }
 
@@ -34,7 +35,7 @@ export abstract class Command {
    *
    * @returns {boolean}
    */
-  needsArgument(): boolean {
+  needsArgument() {
     return this.argumentNeeded;
   }
 
@@ -42,7 +43,7 @@ export abstract class Command {
    *
    * @returns {boolean}
    */
-  needsConfig(): boolean {
+  needsConfig() {
     return this.configNeeded;
   }
 
@@ -50,7 +51,7 @@ export abstract class Command {
    *
    * @param {string} argument
    */
-  setArgument(argument: string): void {
+  setArgument(argument: string) {
     this.argument = argument;
   }
 
@@ -58,23 +59,23 @@ export abstract class Command {
    *
    * @returns {string}
    */
-  getArgument(): string {
+  getArgument() {
     return this.argument;
   }
 
   /**
    *
-   * @returns {string[]}
+   * @returns {ArgumentsType}
    */
-  getAvailableArguments(): string[] {
+  getAvailableArguments() {
     return this.availableArguments;
   }
 
   /**
    *
-   * @returns {{}}
+   * @returns {OptionsType}
    */
-  getAvailableOptions(): OptionsType {
+  getAvailableOptions() {
     return this.availableOptions;
   }
 

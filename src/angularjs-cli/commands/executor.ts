@@ -1,5 +1,6 @@
 import {OptionsType} from "../options/options.type";
 import {Color} from "../tools/color";
+import {Argument} from "./argument";
 import {Command} from "./command";
 import * as _ from 'lodash';
 import {AngularjsCli} from "../angularjs-cli";
@@ -55,19 +56,27 @@ export abstract class Executor {
    * @returns {boolean}
    */
   isArgumentValid(): boolean {
-    const isValid = this.command.getAvailableArguments().indexOf(this.command.getArgument()) !== -1 ||
-      this.command.getAvailableArguments().length === 0;
+    const isValid = this.command.getAvailableArguments().hasOwnProperty(this.command.getArgument()) ||
+      !this.command.needsArgument();
 
-    if(isValid) {
-      return true;
+    if(!isValid) {
+      Logger.print(`${Color.red(`Invalid argument on command ${this.command.getName()}`)}. Valid arguments are:`);
+      _.forEach(this.command.getAvailableArguments(), (argument: Argument) => {
+        Logger.print(` ${argument.getName()}`);
+      });
+
+      return false;
     }
 
-    Logger.print(`${Color.red(`Invalid argument on command ${this.command.getName()}`)}. Valid arguments are:`);
-    _.forEach(this.command.getAvailableArguments(), (argument: string) => {
-      Logger.print(` ${argument}`);
-    });
+    if(this.command.getAvailableArguments().hasOwnProperty(this.command.getArgument()) &&
+      this.command.getAvailableArguments()[this.command.getArgument()].valueNeeded() &&
+      this.command.getAvailableArguments()[this.command.getArgument()].getValue() === "") {
+      Logger.print(Color.red(`Value needed for argument ${this.command.getArgument()}`));
 
-    return false;
+      return false;
+    }
+
+    return true;
   }
 
 }

@@ -7,9 +7,6 @@ import {Logger} from "../tools/logger";
 
 export class Folder {
 
-  /**
-   * @type {Config}
-   */
   protected config: Config;
 
   /**
@@ -43,34 +40,26 @@ export class Folder {
     const scssFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'scss');
     const imagesFolder = path.join(srcFolder, this.config.sourceFolder, 'assets', 'images');
     const testFolder = path.join(srcFolder, 'test', this.config.appName);
-    mkdirp(appFolder, (error) => {
-      this.errorCallback(appFolder, error);
-    });
-    mkdirp(scssFolder, (error) => {
-      this.errorCallback(scssFolder, error);
-    });
-    mkdirp(imagesFolder, (error) => {
-      this.errorCallback(imagesFolder, error);
-    });
-    mkdirp(testFolder, (error) => {
-      this.errorCallback(testFolder, error);
-    });
+
+    this.mkdir(appFolder);
+    this.mkdir(scssFolder);
+    this.mkdir(imagesFolder);
+    this.mkdir(testFolder);
   }
 
   /**
    *
-   * @param {string} folderName
-   * @param {NodeJS.ErrnoException} error
+   * @param {string} folder
    */
-  private errorCallback(folderName: string, error: ErrnoException): void {
-    if(error) {
-      Logger.print(Color.red(`Failed to create directory ${folderName}`));
+  mkdir(folder: string) {
+    try {
+      mkdirp.sync(folder);
+
+      Logger.log(` - source folder created at ${folder}`);
+    } catch(error) {
+      Logger.print(Color.red(`Failed to create directory ${folder}`));
       Logger.log(Color.red(`\n${error}`));
-
-      return;
     }
-
-    Logger.log(` - source folder created at ${folderName}`);
   }
 
 }

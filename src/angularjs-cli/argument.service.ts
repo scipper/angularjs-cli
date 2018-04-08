@@ -45,6 +45,16 @@ export class ArgumentService {
       command.setArgument(realArguments[1]);
     }
 
+    if(command.getArgument() &&
+      command.getAvailableArguments().hasOwnProperty(command.getArgument()) &&
+      command.getAvailableArguments()[command.getArgument()].valueNeeded()) {
+      let argumentValue = "";
+      if(realArguments[2] && realArguments[2].charAt(0) !== "-") {
+        argumentValue = realArguments[2];
+      }
+      command.getAvailableArguments()[command.getArgument()].setValue(argumentValue);
+    }
+
     return command;
   }
 
