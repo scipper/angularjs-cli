@@ -2,6 +2,7 @@ import {ArgumentService} from "./argument.service";
 import {Argument} from "./commands/argument";
 import {Command} from "./commands/command";
 import {HelpCommandExecutor} from "./commands/help-command/help-command.executor";
+import {InvalidCommand} from "./commands/invalid-command";
 import {Option} from "./options/option";
 import {ErrorCodes} from "./errors/error-codes";
 import {AvailableCommands} from "./commands/available-commands";
@@ -106,7 +107,15 @@ export class AngularjsCli {
       Logger.print(`${Color.yellow("Missing command")}. Available commands are:`);
 
       _.forEach(AvailableCommands, (command: Command) => {
-        Logger.print(` ${command.getName()}`);
+        Logger.print(` ${command.getName()}\t${command.getDescription()}`);
+      });
+    }
+
+    if(this.executionCode === ErrorCodes.COMMAND_INVALID_COMMAND) {
+      Logger.print(`${Color.red("Invalid command")}. Available commands are:`);
+
+      _.forEach(AvailableCommands, (command: Command) => {
+        Logger.print(` ${command.getName()}\t${command.getDescription()}`);
       });
     }
 
@@ -129,15 +138,19 @@ export class AngularjsCli {
    *
    * @returns {string}
    */
-  protected getCommandName(): string {
+  protected getCommandName() {
+    if(!this.command) {
+      return "";
+    }
+
     return this.command.getName();
   }
 
   /**
    *
-   * @returns {Command}
+   * @returns {Command | null}
    */
-  protected getCommand(): Command {
+  protected getCommand() {
     return this.command;
   }
 
@@ -146,8 +159,12 @@ export class AngularjsCli {
    * @returns {number}
    */
   protected isCommandValid(): number {
-    if(this.command === null) {
+    if(this.command.getName() === "MISSING") {
       return ErrorCodes.COMMAND_MISSING_COMMAND;
+    }
+
+    if(this.command.getName() === "INVALID") {
+      return ErrorCodes.COMMAND_INVALID_COMMAND;
     }
 
     if(this.command.needsArgument() &&

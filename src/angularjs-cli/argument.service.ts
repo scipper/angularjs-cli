@@ -1,3 +1,5 @@
+import {InvalidCommand} from "./commands/invalid-command";
+import {MissingCommand} from "./commands/missing-command";
 import {Option} from "./options/option";
 import {AvailableOptions} from "./options/available-options";
 import {Command} from "./commands/command";
@@ -27,11 +29,11 @@ export class ArgumentService {
   /**
    *
    * @param {string[]} cliArguments
-   * @returns {Array<Command>}
+   * @returns {Command}
    */
   public static parseCommand(cliArguments: string[]): Command {
     const realArguments: string[] = cliArguments.splice(2);
-    let command: Command = null as any;
+    let command: Command = new MissingCommand();
 
     if(realArguments.length === 0) {
       return command;
@@ -39,6 +41,12 @@ export class ArgumentService {
 
     if(AvailableCommands.hasOwnProperty(realArguments[0])) {
       command = AvailableCommands[realArguments[0]];
+    }
+
+    if(command.getName() === "MISSING") {
+      command = new InvalidCommand();
+
+      return command;
     }
 
     if(command && realArguments[1] !== undefined && realArguments[1].indexOf('-') === -1) {

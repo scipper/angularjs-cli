@@ -14,6 +14,7 @@ export class GenerateCommand extends Command {
     const componentArgument = new ComponentArgument();
 
     this.name = 'generate';
+    this.description = "Generate a component or module";
     this.configNeeded = true;
     this.argumentNeeded = true;
     this.availableOptions = {

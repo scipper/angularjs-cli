@@ -1,10 +1,10 @@
 import {OptionsType} from "../options/options.type";
-import {Argument} from "./argument";
 import {ArgumentsType} from "./arguments.type";
 
 export abstract class Command {
 
   protected name: string;
+  protected description: string;
   protected configNeeded: boolean;
   protected argumentNeeded: boolean;
   protected argument: string;
@@ -16,6 +16,7 @@ export abstract class Command {
    */
   protected constructor() {
     this.name = "";
+    this.description = "";
     this.argument = "";
     this.configNeeded = false;
     this.argumentNeeded = false;
@@ -29,6 +30,14 @@ export abstract class Command {
    */
   getName() {
     return this.name;
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  getDescription() {
+    return this.description;
   }
 
   /**
